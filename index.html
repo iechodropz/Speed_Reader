@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <!--Allows browsers to know how to correctly display special characters, symbols and multilingual text. Without this, browsers might default to an older or incompatible encoding.-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!--Without this, a page might be rendered at a default size, which could be too wide or too narrow on certain devices.-->
+        <title>Speed Reader</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <input type="file" id="fileInput" accept=".txt" />
+            <div class="controls">
+                <button id="startBtn" disabled>Start</button>
+                <button id="pauseBtn" disabled>Pause</button>
+                <button id="backBtn" disabled>Back</button>
+                <button id="forwardBtn" disabled>Forward</button>
+            </div>
+            <div class="speed-control">
+                <label for="speedSlider">Speed (ms):</label>
+                <input
+                    type="range"
+                    id="speedSlider"
+                    min="100"
+                    max="1000"
+                    step="50"
+                    value="500"
+                />
+                <span id="speedValue">500</span>
+            </div>
+            <div id="wordDisplay"></div>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
