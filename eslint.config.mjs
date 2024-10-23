@@ -5,7 +5,7 @@ import html from '@html-eslint/eslint-plugin';
 export default [
     {
         languageOptions: {
-            globals: { ...globals.browser, ...globals.jest },
+            globals: { ...globals.browser, ...globals.node, ...globals.jest },
         },
     },
     pluginJs.configs.recommended,
