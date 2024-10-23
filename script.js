@@ -13,6 +13,14 @@ const SpeedReader = {
     forwardBtn: document.getElementById('forwardBtn'),
     speedSlider: document.getElementById('speedSlider'),
     wordDisplay: document.getElementById('wordDisplay'),
+    speedValue: document.getElementById('speedValue'),
+
+    displayNextWord() {
+        this.currentIndex++;
+        if (this.currentIndex < this.words.length) {
+            this.displayWord();
+        }
+    },
 
     displayWord() {
         this.wordDisplay.textContent = this.words[this.currentIndex];
@@ -49,6 +57,39 @@ const SpeedReader = {
         this.speedSlider.addEventListener('change', () => this.updateSpeed());
     },
 
+    moveWord(direction) {
+        // Math.max and Math.min prevent out-of-bounds error when navigating through the words.
+        this.currentIndex = Math.max(
+            0,
+            Math.min(this.words.length - 1, this.currentIndex + direction)
+        );
+        this.displayWord();
+    },
+
+    pauseReading() {
+        this.isReading = false;
+        clearTimeout(this.timeoutId);
+        this.updateButtonStates();
+    },
+
+    scheduleTick() {
+        // Cancel timer that was previously established by setTimeout()
+        clearTimeout(this.timeoutId);
+        if (this.isReading) {
+            // setTimeout() executes the piece of code after a designated delay (this.speed).
+            this.timeoutId = setTimeout(() => {
+                this.displayNextWord();
+
+                if (this.currentIndex < this.words.length) {
+                    this.scheduleTick();
+                } else {
+                    this.pauseReading();
+                    this.startBtn.disabled = false;
+                }
+            }, this.speed);
+        }
+    },
+
     startReading() {
         // If we are at the last word, loop back to the beginning.
         if (this.currentIndex >= this.words.length) {
@@ -57,7 +98,7 @@ const SpeedReader = {
         this.isReading = true;
         this.displayWord();
         this.scheduleTick();
-        // TODO
+        this.updateButtonStates();
     },
 
     updateButtonStates() {
@@ -67,6 +108,14 @@ const SpeedReader = {
         this.forwardBtn.disabled = this.isReading || this.words.length === 0;
         this.speedSlider.disabled = this.isReading;
     },
+
+    updateSpeed() {
+        // parseInt() converts string into an integer.
+        this.speed = parseInt(this.speedSlider.value);
+        this.speedValue.textContent = this.speed;
+    },
+
+    updateSpeedDisplay() {},
 };
 
 // Initialize if on a browser environment.
