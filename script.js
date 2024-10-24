@@ -47,14 +47,14 @@ const SpeedReader = {
     },
 
     initialize() {
-        this.fileInput.addEventListener('change', () =>
-            this.handleFileUpload()
+        this.fileInput.addEventListener('change', (event) =>
+            this.handleFileUpload(event)
         );
         this.startBtn.addEventListener('click', () => this.startReading());
         this.pauseBtn.addEventListener('click', () => this.pauseReading());
         this.backBtn.addEventListener('click', () => this.moveWord(-1));
         this.forwardBtn.addEventListener('click', () => this.moveWord(1));
-        this.speedSlider.addEventListener('change', () => this.updateSpeed());
+        this.speedSlider.addEventListener('input', () => this.updateSpeed());
     },
 
     moveWord(direction) {
@@ -110,12 +110,9 @@ const SpeedReader = {
     },
 
     updateSpeed() {
-        // parseInt() converts string into an integer.
         this.speed = parseInt(this.speedSlider.value);
         this.speedValue.textContent = this.speed;
     },
-
-    updateSpeedDisplay() {},
 };
 
 // Initialize if on a browser environment.
