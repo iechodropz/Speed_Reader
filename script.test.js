@@ -50,6 +50,13 @@ describe('Speed Reader App', () => {
         document.body.innerHTML = '';
     });
 
+    test('Initial button states should be disabled', () => {
+        expect(SpeedReader.startBtn.disabled).toBe(true);
+        expect(SpeedReader.pauseBtn.disabled).toBe(true);
+        expect(SpeedReader.backBtn.disabled).toBe(true);
+        expect(SpeedReader.forwardBtn.disabled).toBe(true);
+    });
+
     // "done" parameter is a function provided by Jest for asynchronous tests. Ensures that Jest waits for the asynchronous operations to finish before it moves on to the next test.
     test('handleFileUpload', (done) => {
         // The File class creates a new File object representing a simulated file.
