@@ -26,6 +26,15 @@ describe('Speed Reader App', () => {
         </div>
         `;
 
+        SpeedReader.fileInput = document.getElementById('fileInput');
+        SpeedReader.startBtn = document.getElementById('startBtn');
+        SpeedReader.pauseBtn = document.getElementById('pauseBtn');
+        SpeedReader.backBtn = document.getElementById('backBtn');
+        SpeedReader.forwardBtn = document.getElementById('forwardBtn');
+        SpeedReader.speedSlider = document.getElementById('speedSlider');
+        SpeedReader.wordDisplay = document.getElementById('wordDisplay');
+        SpeedReader.speedValue = document.getElementById('speedValue');
+
         SpeedReader.words = [];
         SpeedReader.currentIndex = 0;
         SpeedReader.isReading = false;
@@ -74,19 +83,13 @@ describe('Speed Reader App', () => {
         // Since we are mocking the asynchronous onload() we must wait for that to finish. When multiple setTimeout() calls are used, the second one will only run after the first on has finished executing.
         setTimeout(() => {
             try {
-                expect(document.getElementById('startBtn').disabled).toBe(
-                    false
-                );
-                expect(document.getElementById('pauseBtn').disabled).toBe(true);
-                expect(document.getElementById('backBtn').disabled).toBe(false);
-                expect(document.getElementById('forwardBtn').disabled).toBe(
-                    false
-                );
+                expect(SpeedReader.startBtn.disabled).toBe(false);
+                expect(SpeedReader.pauseBtn.disabled).toBe(true);
+                expect(SpeedReader.backBtn.disabled).toBe(false);
+                expect(SpeedReader.forwardBtn.disabled).toBe(false);
                 expect(SpeedReader.words).toEqual(['Mock', 'file', 'content']);
                 expect(SpeedReader.currentIndex).toBe(0);
-                expect(document.getElementById('wordDisplay').textContent).toBe(
-                    ''
-                );
+                expect(SpeedReader.wordDisplay.textContent).toBe('');
                 done();
             } catch (error) {
                 done(error);
