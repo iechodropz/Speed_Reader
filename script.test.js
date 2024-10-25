@@ -40,4 +40,57 @@ describe('Speed Reader App', () => {
         jest.clearAllTimers();
         document.body.innerHTML = '';
     });
+
+    // "done" parameter is a function provided by Jest for asynchronous tests. Ensures that Jest waits for the asynchronous operations to finish before it moves on to the next test.
+    test('handleFileUpload', (done) => {
+        // The File class creates a new File object representing a simulated file.
+        const file = new File(['Mock file content'], 'mockFile.txt');
+        // Creating a mock event that will be passed to handleFileUpload().
+        const event = {
+            target: {
+                files: [file],
+            },
+        };
+
+        // Creating a mock of FileReader().
+        const mockFileReader = {
+            // onload will be set to a function in handleFileUpload().
+            onload: null,
+            readAsText(file) {
+                // To prevent warning of "'file' is defined but never used".
+                console.log(`Reading file: ${file.name}`);
+                // setTimeout() is mimicking how the real FileReader.onload() works, which is asynchronous.
+                setTimeout(() => {
+                    this.onload({ target: { result: 'Mock file content' } });
+                }, 0);
+            },
+        };
+
+        // Replacing the built-in FileReader() with a mock object that it will return instead.
+        global.FileReader = jest.fn(() => mockFileReader);
+
+        SpeedReader.handleFileUpload(event);
+
+        // Since we are mocking the asynchronous onload() we must wait for that to finish. When multiple setTimeout() calls are used, the second one will only run after the first on has finished executing.
+        setTimeout(() => {
+            try {
+                expect(document.getElementById('startBtn').disabled).toBe(
+                    false
+                );
+                expect(document.getElementById('pauseBtn').disabled).toBe(true);
+                expect(document.getElementById('backBtn').disabled).toBe(false);
+                expect(document.getElementById('forwardBtn').disabled).toBe(
+                    false
+                );
+                expect(SpeedReader.words).toEqual(['Mock', 'file', 'content']);
+                expect(SpeedReader.currentIndex).toBe(0);
+                expect(document.getElementById('wordDisplay').textContent).toBe(
+                    ''
+                );
+                done();
+            } catch (error) {
+                done(error);
+            }
+        }, 0);
+    });
 });
